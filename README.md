@@ -22,6 +22,9 @@ You can do :
 What license? 
 
 ## Download
+
+Minimal Android SDK Version 14
+
 #### Gradle
 **Step 1.** Add it in your root build.gradle at the end of repositories:
 ```gradle
@@ -36,7 +39,7 @@ allprojects {
 **Step 2.** Add the dependency
 ```gradle
 dependencies {
-  implementation 'com.github.anggastudio:SpinnerPickerDialog:1.0'
+  implementation 'com.github.anggastudio:SpinnerPickerDialog:1.0.1'
 }
 ```
 #### Maven
@@ -55,7 +58,7 @@ dependencies {
 <dependency>
   <groupId>com.github.anggastudio</groupId>
   <artifactId>SpinnerPickerDialog</artifactId>
-  <version>1.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
