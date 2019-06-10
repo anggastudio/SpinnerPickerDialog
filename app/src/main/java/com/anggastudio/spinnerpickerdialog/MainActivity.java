@@ -38,6 +38,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showDatePickerDialog() {
+        SpinnerPickerDialog spinnerPickerDialog = getGreenPickerDialog();
+//        SpinnerPickerDialog spinnerPickerDialog = getDefaultPickerDialog();
+        spinnerPickerDialog.show(this.getSupportFragmentManager(), "");
+    }
+
+    private SpinnerPickerDialog getDefaultPickerDialog() {
+        final SpinnerPickerDialog spinnerPickerDialog = new SpinnerPickerDialog();
+        spinnerPickerDialog.setContext(this);
+        spinnerPickerDialog.setOnDialogListener(new SpinnerPickerDialog.OnDialogListener() {
+
+            @Override
+            public void onSetDate(int month, int day, int year) {
+                // "  (Month selected is 0 indexed {0 == January})"
+                String date = (month + 1) + "/" + day + "/" + year;
+                etChooseDate.setText(date);
+
+                String monthString = month + "  (Month selected is 0 indexed {0 == January})";
+                tvMonth.setText(monthString);
+                tvDay.setText(day + "");
+                tvYear.setText(year + "");
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onDismiss() {
+                etChooseDate.clearFocus();
+            }
+
+
+        });
+        return spinnerPickerDialog;
+
+    }
+
+    private SpinnerPickerDialog getGreenPickerDialog() {
         Calendar maxCalendar = Calendar.getInstance();
         maxCalendar.add(Calendar.YEAR, -MAX_YEAR);
         Calendar settledCalendar = getSettledCalendar();
@@ -75,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
-        spinnerPickerDialog.show(this.getSupportFragmentManager(), "");
+        return spinnerPickerDialog;
     }
 
     /**

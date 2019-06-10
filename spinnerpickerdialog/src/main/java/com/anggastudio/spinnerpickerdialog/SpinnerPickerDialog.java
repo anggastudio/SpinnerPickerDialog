@@ -425,6 +425,7 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         if (mOnDialogListener != null) {
             mOnDialogListener.onCancel();
         }
+        this.dismiss();
     }
 
     @Override
