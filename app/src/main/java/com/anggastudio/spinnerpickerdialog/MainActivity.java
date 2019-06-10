@@ -6,21 +6,29 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int MAX_YEAR = 18;
-    EditText chooseDate;
+    EditText etChooseDate;
+    TextView tvMonth;
+    TextView tvDay;
+    TextView tvYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        chooseDate = findViewById(R.id.etChooseDate);
-        chooseDate.setOnClickListener(new View.OnClickListener() {
+        etChooseDate = findViewById(R.id.etChooseDate);
+        tvMonth = findViewById(R.id.tvMonth);
+        tvDay = findViewById(R.id.tvDay);
+        tvYear = findViewById(R.id.tvYear);
+
+        etChooseDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog();
@@ -46,8 +54,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSetDate(int month, int day, int year) {
                 String date = (month + 1) + "/" + day + "/" + year;
-                chooseDate.setText(date);
+                etChooseDate.setText(date);
                 spinnerPickerDialog.dismiss();
+
+                String monthString = month + "  (Month selected is 0 indexed {0 == January})";
+                tvMonth.setText(monthString);
+                tvDay.setText(day + "");
+                tvYear.setText(year + "");
             }
 
             @Override
@@ -57,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDismiss() {
-                chooseDate.clearFocus();
+                etChooseDate.clearFocus();
             }
 
 
@@ -72,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private Calendar getSettledCalendar() {
         Calendar settledCalendar = null;
-        String populatedDate = chooseDate.getText().toString();
+        String populatedDate = etChooseDate.getText().toString();
         if (!populatedDate.isEmpty()) {
             String[] dateString = populatedDate.split("/");
             if (dateString.length > 0) {
