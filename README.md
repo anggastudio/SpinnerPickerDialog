@@ -1,6 +1,10 @@
 # SpinnerPickerDialog
 Date Spinner Picker Dialog
 
+![Sample 1](images/sample1.png)
+![Sample 2](images/sample2.png)
+![Sample 3](images/sample3.png)
+
 ## Feature
 * Show date picker with spinner style
 * Fully Customizable style
@@ -56,7 +60,9 @@ dependencies {
 ```
 
 ## Usage
-* Load image with size as tall as line height (auto width)
+* Show default date picker dialog like this:
+
+![Sample 4](images/sample4.png)
 ```java
 final SpinnerPickerDialog spinnerPickerDialog = new SpinnerPickerDialog();
 spinnerPickerDialog.setContext(this);
@@ -79,4 +85,38 @@ spinnerPickerDialog.setOnDialogListener(new SpinnerPickerDialog.OnDialogListener
             
         });
 spinnerPickerDialog.show(this.getSupportFragmentManager(), "");        
+```
+
+* Show fully customizable date picker dialog like this (green color):
+
+![Sample 2](images/sample2.png)
+```java
+Calendar maxCalendar = Calendar.getInstance();
+maxCalendar.add(Calendar.YEAR, -MAX_YEAR);
+
+final SpinnerPickerDialog spinnerPickerDialog = new SpinnerPickerDialog();
+spinnerPickerDialog.setContext(this);
+spinnerPickerDialog.setMaxCalendar(maxCalendar);
+spinnerPickerDialog.setAllColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
+spinnerPickerDialog.setmTextColor(Color.BLACK);
+spinnerPickerDialog.setArrowButton(true);
+spinnerPickerDialog.setOnDialogListener(new SpinnerPickerDialog.OnDialogListener() {
+
+            @Override
+            public void onSetDate(int month, int day, int year) {
+                // "  (Month selected is 0 indexed {0 == January})"
+            }
+
+            @Override
+            public void onCancel() {
+                
+            }
+
+            @Override
+            public void onDismiss() {
+                
+            }
+            
+        });
+spinnerPickerDialog.show(this.getSupportFragmentManager(), ""); 
 ```
