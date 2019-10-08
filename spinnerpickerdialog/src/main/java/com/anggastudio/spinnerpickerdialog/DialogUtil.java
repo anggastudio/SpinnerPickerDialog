@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -15,9 +16,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 public class DialogUtil {
 
-    public static Dialog setMargins(Dialog dialog, int marginLeft, int marginRight, Drawable dialogBackground) {
+    public static Dialog setMargins(Dialog dialog,
+                                    int marginLeft,
+                                    int marginRight,
+                                    Drawable dialogBackground
+    ) {
         Window window = dialog.getWindow();
         if (window == null) {
             // dialog window is not available, cannot apply margins
@@ -27,7 +35,10 @@ public class DialogUtil {
 
         // set dialog to fullscreen
         RelativeLayout root = new RelativeLayout(context);
-        root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        root.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
         root.setBackgroundColor(Color.WHITE);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(root);
@@ -53,15 +64,42 @@ public class DialogUtil {
     private static Point getDisplayDimensions(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-
+        Method mGetRawW;
+        Method mGetRawH;
         DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
-        int screenWidth = metrics.widthPixels;
-        int screenHeight = metrics.heightPixels;
+        int screenWidth = 0;
+        int screenHeight = 0;
+        int physicalHeight = 0;
 
-        // find out if status bar has already been subtracted from screenHeight
-        display.getRealMetrics(metrics);
-        int physicalHeight = metrics.heightPixels;
+        try {
+            // find out if status bar has already been subtracted from screenHeight
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                display.getRealMetrics(metrics);
+                screenWidth = metrics.widthPixels;
+                screenHeight = metrics.heightPixels;
+                physicalHeight = metrics.heightPixels;
+            } else {
+                mGetRawH = Display.class.getMethod("getRawHeight");
+                mGetRawW = Display.class.getMethod("getRawWidth");
+
+                try {
+                    screenWidth = (Integer) mGetRawW.invoke(display);
+                    screenHeight = (Integer) mGetRawH.invoke(display);
+                    physicalHeight = (Integer) mGetRawH.invoke(display);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
         int statusBarHeight = getStatusBarHeight(context);
         int navigationBarHeight = getNavigationBarHeight(context);
         int heightDelta = physicalHeight - screenHeight;
@@ -74,13 +112,19 @@ public class DialogUtil {
 
     private static int getStatusBarHeight(Context context) {
         Resources resources = context.getResources();
-        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId = resources.getIdentifier(
+                "status_bar_height",
+                "dimen",
+                "android");
         return (resourceId > 0) ? resources.getDimensionPixelSize(resourceId) : 0;
     }
 
     private static int getNavigationBarHeight(Context context) {
         Resources resources = context.getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        int resourceId = resources.getIdentifier(
+                "navigation_bar_height",
+                "dimen",
+                "android");
         return (resourceId > 0) ? resources.getDimensionPixelSize(resourceId) : 0;
     }
 
