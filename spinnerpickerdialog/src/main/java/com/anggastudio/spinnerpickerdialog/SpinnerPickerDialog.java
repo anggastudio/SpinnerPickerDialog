@@ -48,7 +48,11 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
             newCalendar.set(year, monthOfYear, dayOfMonth);
             if (maxCalendar != null && newCalendar.after(maxCalendar)) {
                 try {
-                    datePicker.updateDate(maxCalendar.get(Calendar.YEAR), maxCalendar.get(Calendar.MONTH), maxCalendar.get(Calendar.DAY_OF_MONTH));
+                    datePicker.updateDate(
+                            maxCalendar.get(Calendar.YEAR),
+                            maxCalendar.get(Calendar.MONTH),
+                            maxCalendar.get(Calendar.DAY_OF_MONTH)
+                    );
                 } catch (Exception e) {
                     Log.e("updateDate", e.getMessage());
                 }
@@ -202,7 +206,8 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
                 int margin = getWidthByPersen(0.15f);
 
                 if (dialogBackground == null) {
-                    dialogBackground = ContextCompat.getDrawable(mContext, R.drawable.background_white_radius_4dp);
+                    dialogBackground = ContextCompat.getDrawable(
+                            mContext, R.drawable.background_white_radius_4dp);
                 }
                 DialogUtil.setMargins(dialog, margin, margin, dialogBackground);
             }
@@ -216,7 +221,10 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState
+    ) {
         return inflater.inflate(R.layout.spinner_datepicker_layout, container);
     }
 
@@ -256,25 +264,39 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
             datePicker.setMaxDate(maxCalendar.getTimeInMillis());
         }
         if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-            datePicker.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), onDateChangedListener);
+            datePicker.init(
+                    mCalendar.get(Calendar.YEAR),
+                    mCalendar.get(Calendar.MONTH),
+                    mCalendar.get(Calendar.DAY_OF_MONTH),
+                    onDateChangedListener
+            );
         } else {
-            datePicker.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), null);
+            datePicker.init(
+                    mCalendar.get(Calendar.YEAR),
+                    mCalendar.get(Calendar.MONTH),
+                    mCalendar.get(Calendar.DAY_OF_MONTH),
+                    null
+            );
         }
     }
 
     private void customizeDatePicker(DatePicker datePicker) {
         // set date picker padding
-        int pTop = datePicker.getPaddingTop();
-        int pBottom = datePicker.getPaddingBottom();
+        int paddingTop = datePicker.getPaddingTop();
+        int paddingBottom = datePicker.getPaddingBottom();
         int datePickerPadding = getWidthByPersen(0.02f);
-        datePicker.setPadding(datePickerPadding, pTop, datePickerPadding, pBottom);
+        datePicker.setPadding(datePickerPadding, paddingTop, datePickerPadding, paddingBottom);
 
         // get each number picker
         LinearLayout pickerRootLayout = (LinearLayout) datePicker.getChildAt(0);
         LinearLayout pickersLayout = (LinearLayout) pickerRootLayout.getChildAt(0);
 
         // set layout params for each number picker
-        LinearLayout.LayoutParams pickerLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        LinearLayout.LayoutParams pickerLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1
+        );
         int marginHorizontal = getWidthByPersen(0.05f);
         int marginVertical = getWidthByPersen(0.03f);
         pickerLayoutParams.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical);
@@ -304,7 +326,10 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         pickerRootLayout.removeAllViews();
         pickerRootLayout.setOrientation(LinearLayout.VERTICAL);
 
-        RelativeLayout.LayoutParams relativeParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, decreasedHeight);
+        RelativeLayout.LayoutParams relativeParam = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                decreasedHeight
+        );
         RelativeLayout relativeLayout = new RelativeLayout(mContext);
         relativeLayout.setLayoutParams(relativeParam);
 
@@ -314,16 +339,19 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         relativeLayout.addView(arrowButtonsUp, 1);
         relativeLayout.addView(arrowButtonsDown, 2);
 
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) arrowButtonsDown.getLayoutParams();
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        arrowButtonsDown.setLayoutParams(params);
+        RelativeLayout.LayoutParams arrowLayoutParam = (RelativeLayout.LayoutParams) arrowButtonsDown.getLayoutParams();
+        arrowLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        arrowButtonsDown.setLayoutParams(arrowLayoutParam);
         arrowButtonsDown.setPadding(0, 0, 0, getWidthByPersen(0.02f));
         arrowButtonsUp.setPadding(0, getWidthByPersen(0.02f), 0, 0);
 
     }
 
     private LinearLayout getArrowButtonsLayout(int arrowDirection, int count) {
-        LinearLayout.LayoutParams arrowLayoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams arrowLayoutParam = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
         LinearLayout arrowButtonsLayout = new LinearLayout(mContext);
         arrowButtonsLayout.setLayoutParams(arrowLayoutParam);
 
@@ -336,12 +364,19 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
     }
 
     private LinearLayout getArrowButton(int arrowDirection) {
-        LinearLayout.LayoutParams arrowButtonParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        LinearLayout.LayoutParams arrowButtonParam = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1
+        );
         LinearLayout arrowButton = new LinearLayout(mContext);
         arrowButton.setLayoutParams(arrowButtonParam);
         arrowButton.setGravity(Gravity.CENTER);
 
-        LinearLayout.LayoutParams arrowParam = new LinearLayout.LayoutParams(getWidthByPersen(0.03f), getWidthByPersen(0.03f));
+        LinearLayout.LayoutParams arrowParam = new LinearLayout.LayoutParams(
+                getWidthByPersen(0.03f),
+                getWidthByPersen(0.03f)
+        );
         ImageView arrowImage = new ImageView(mContext);
         arrowImage.setLayoutParams(arrowParam);
         if (this.arrowDrawable != null) {
@@ -366,7 +401,8 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
             View child = numberPicker.getChildAt(i);
             if (child instanceof EditText) {
                 try {
-                    Field selectorWheelPaintField = numberPicker.getClass().getDeclaredField("mSelectorWheelPaint");
+                    Field selectorWheelPaintField =
+                            numberPicker.getClass().getDeclaredField("mSelectorWheelPaint");
                     selectorWheelPaintField.setAccessible(true);
                     ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(color);
                     ((EditText) child).setTextColor(color);
@@ -384,8 +420,10 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         final int count = numberPicker.getChildCount();
         for (int i = 0; i < count; i++) {
             try {
-                Field dividerField = numberPicker.getClass().getDeclaredField("mSelectionDivider");
-                Field dividerFieldDistance = numberPicker.getClass().getDeclaredField("mSelectionDividersDistance");
+                Field dividerField =
+                        numberPicker.getClass().getDeclaredField("mSelectionDivider");
+                Field dividerFieldDistance =
+                        numberPicker.getClass().getDeclaredField("mSelectionDividersDistance");
                 dividerField.setAccessible(true);
                 dividerFieldDistance.setAccessible(true);
                 ColorDrawable colorDrawable = new ColorDrawable(color);
@@ -413,7 +451,11 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
      */
     private void setDate() {
         if (mOnDialogListener != null) {
-            mOnDialogListener.onSetDate(datePicker.getMonth(), datePicker.getDayOfMonth(), datePicker.getYear());
+            mOnDialogListener.onSetDate(
+                    datePicker.getMonth(),
+                    datePicker.getDayOfMonth(),
+                    datePicker.getYear()
+            );
         }
         this.dismiss();
     }
