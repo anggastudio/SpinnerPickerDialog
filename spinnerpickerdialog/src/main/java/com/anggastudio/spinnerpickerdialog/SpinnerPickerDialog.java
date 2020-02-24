@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.DatePicker;
+import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,22 +39,16 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
     private static final int ARROW_DOWN = 1;
     private Context mContext;
     private SpinnerPickerDialog.OnDialogListener mOnDialogListener;
+    private OnDateSetPerValue onDateSetListener;
+    private OnCancel onCancelListener;
+    private OnDismiss onDismissListener;
+    private OnDateSetMillis onDateSetMillis;
     private DatePicker datePicker;
     private int screenWidth;
     private Calendar maxCalendar;
-    DatePicker.OnDateChangedListener onDateChangedListener = new DatePicker.OnDateChangedListener() {
-        @Override
-        public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            Calendar newCalendar = Calendar.getInstance();
-            newCalendar.set(year, monthOfYear, dayOfMonth);
-            if (maxCalendar != null && newCalendar.after(maxCalendar)) {
-                try {
-                    datePicker.updateDate(maxCalendar.get(Calendar.YEAR), maxCalendar.get(Calendar.MONTH), maxCalendar.get(Calendar.DAY_OF_MONTH));
-                } catch (Exception e) {
-                    Log.e("updateDate", e.getMessage());
-                }
-            }
-        }
+    OnDateChangedListener onDateChangedListener = (view, year, monthOfYear, dayOfMonth) -> {
+        Calendar newCalendar = Calendar.getInstance();
+        newCalendar.set(year, monthOfYear, dayOfMonth);
     };
     private Calendar mCalendar;
     private int mTextColor;
@@ -180,6 +175,46 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         return this;
     }
 
+    /**
+     * Set the dialog callback listener
+     *
+     * @param onDateSetListener instance of OnDialogListener
+     */
+    public SpinnerPickerDialog setOnDateSetListener(final OnDateSetPerValue onDateSetListener) {
+        this.onDateSetListener = onDateSetListener;
+        return this;
+    }
+
+    /**
+     * Set the dialog callback listener
+     *
+     * @param onDateSetMillis instance of OnDialogListener
+     */
+    public SpinnerPickerDialog setOnDateSetListener(final OnDateSetMillis onDateSetMillis) {
+        this.onDateSetMillis = onDateSetMillis;
+        return this;
+    }
+
+    /**
+     * Set the dialog callback listener
+     *
+     * @param onDismissListener instance of OnDismiss
+     */
+    public SpinnerPickerDialog setOnDismissListener(final OnDismiss onDismissListener) {
+        this.onDismissListener = onDismissListener;
+        return this;
+    }
+
+    /**
+     * Set the dialog callback listener
+     *
+     * @param onCancelListener instance of OnCancel
+     */
+    public SpinnerPickerDialog setOnCancelListener(final OnCancel onCancelListener) {
+        this.onCancelListener = onCancelListener;
+        return this;
+    }
+
     @Override
     public void onCreate(Bundle b) {
         super.onCreate(b);
@@ -255,7 +290,7 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         if (maxCalendar != null) {
             datePicker.setMaxDate(maxCalendar.getTimeInMillis());
         }
-        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
             datePicker.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), onDateChangedListener);
         } else {
             datePicker.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), null);
@@ -415,6 +450,17 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         if (mOnDialogListener != null) {
             mOnDialogListener.onSetDate(datePicker.getMonth(), datePicker.getDayOfMonth(), datePicker.getYear());
         }
+        if (onDateSetListener != null) {
+            onDateSetListener.onSet(datePicker.getMonth(), datePicker.getDayOfMonth(), datePicker.getYear());
+        }
+        if (onDateSetMillis != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, datePicker.getYear());
+            calendar.set(Calendar.MONTH, datePicker.getMonth());
+            calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+            long millis = calendar.getTimeInMillis();
+            onDateSetMillis.onSet(millis);
+        }
         this.dismiss();
     }
 
@@ -422,9 +468,7 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
      * Send negative button click event to call back listener
      */
     private void cancel() {
-        if (mOnDialogListener != null) {
-            mOnDialogListener.onCancel();
-        }
+        doOnCancel();
         this.dismiss();
     }
 
@@ -434,13 +478,23 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         if (mOnDialogListener != null) {
             mOnDialogListener.onDismiss();
         }
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss();
+        }
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
+        doOnCancel();
+    }
+
+    private void doOnCancel() {
         if (mOnDialogListener != null) {
-            mOnDialogListener.onDismiss();
+            mOnDialogListener.onCancel();
+        }
+        if (onCancelListener != null) {
+            onCancelListener.onCancel();
         }
     }
 
@@ -461,6 +515,54 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
 
         /**
          * Called when dialog is dismissing
+         */
+        void onDismiss();
+
+    }
+
+    /**
+     * Listener that wants to listen for dialog button events.
+     */
+    public interface OnDateSetPerValue {
+
+        /**
+         * Called when set button clicked.
+         */
+        void onSet(int month, int day, int year);
+
+    }
+
+    /**
+     * Listener that wants to listen for dialog button events.
+     */
+    public interface OnDateSetMillis {
+
+        /**
+         * Called when set button clicked.
+         */
+        void onSet(long millis);
+
+    }
+
+    /**
+     * Listener that wants to listen for dialog button events.
+     */
+    public interface OnCancel {
+
+        /**
+         * Called when set button clicked.
+         */
+        void onCancel();
+
+    }
+
+    /**
+     * Listener that wants to listen for dialog button events.
+     */
+    public interface OnDismiss {
+
+        /**
+         * Called when set button clicked.
          */
         void onDismiss();
 

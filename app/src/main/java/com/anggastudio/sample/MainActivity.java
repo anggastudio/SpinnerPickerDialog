@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -30,12 +29,7 @@ public class MainActivity extends AppCompatActivity {
         tvDay = findViewById(R.id.tvDay);
         tvYear = findViewById(R.id.tvYear);
 
-        etChooseDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
+        etChooseDate.setOnClickListener(v -> showDatePickerDialog());
 
     }
 
@@ -90,32 +84,18 @@ public class MainActivity extends AppCompatActivity {
         spinnerPickerDialog.setAllColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
         spinnerPickerDialog.setmTextColor(Color.BLACK);
         spinnerPickerDialog.setArrowButton(true);
-        spinnerPickerDialog.setOnDialogListener(new SpinnerPickerDialog.OnDialogListener() {
+        spinnerPickerDialog.setOnDateSetListener((month, day, year) -> {
+            String date = (month + 1) + "/" + day + "/" + year;
+            etChooseDate.setText(date);
+            spinnerPickerDialog.dismiss();
 
-            @Override
-            public void onSetDate(int month, int day, int year) {
-                String date = (month + 1) + "/" + day + "/" + year;
-                etChooseDate.setText(date);
-                spinnerPickerDialog.dismiss();
-
-                String monthString = month + "  (Month selected is 0 indexed {0 == January})";
-                tvMonth.setText(monthString);
-                tvDay.setText(day + "");
-                tvYear.setText(year + "");
-            }
-
-            @Override
-            public void onCancel() {
-                spinnerPickerDialog.dismiss();
-            }
-
-            @Override
-            public void onDismiss() {
-                etChooseDate.clearFocus();
-            }
-
-
+            String monthString = month + "  (Month selected is 0 indexed {0 == January})";
+            tvMonth.setText(monthString);
+            tvDay.setText(day + "");
+            tvYear.setText(year + "");
         });
+        spinnerPickerDialog.setOnCancelListener(spinnerPickerDialog::dismiss);
+        spinnerPickerDialog.setOnDismissListener(() -> etChooseDate.clearFocus());
         return spinnerPickerDialog;
     }
 
