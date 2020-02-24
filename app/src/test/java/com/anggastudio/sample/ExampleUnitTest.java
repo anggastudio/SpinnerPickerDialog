@@ -1,4 +1,4 @@
-package com.anggastudio.spinnerpickerdialog;
+package com.anggastudio.sample;
 
 import org.junit.Test;
 

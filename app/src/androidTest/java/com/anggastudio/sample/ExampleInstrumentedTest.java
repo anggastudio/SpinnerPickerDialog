@@ -1,4 +1,4 @@
-package com.anggastudio.spinnerpickerdialog;
+package com.anggastudio.sample;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.anggastudio.spinnerpickerdialog", appContext.getPackageName());
+        assertEquals("com.anggastudio.sample", appContext.getPackageName());
     }
 }

@@ -1,4 +1,4 @@
-package com.anggastudio.spinnerpickerdialog;
+package com.anggastudio.sample;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.anggastudio.spinnerpickerdialog.SpinnerPickerDialog;
 
 import java.util.Calendar;
 
