@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -60,7 +61,11 @@ public class DialogUtil {
         int screenHeight = metrics.heightPixels;
 
         // find out if status bar has already been subtracted from screenHeight
-        display.getRealMetrics(metrics);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            display.getRealMetrics(metrics);
+        } else {
+            display.getMetrics(metrics);
+        }
         int physicalHeight = metrics.heightPixels;
         int statusBarHeight = getStatusBarHeight(context);
         int navigationBarHeight = getNavigationBarHeight(context);

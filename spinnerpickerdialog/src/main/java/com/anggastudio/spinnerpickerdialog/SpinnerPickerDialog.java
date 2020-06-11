@@ -151,8 +151,8 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         return this;
     }
 
-    public SpinnerPickerDialog setTitleUnderineColor(int titleUnderineColor) {
-        this.titleUnderlineColor = titleUnderineColor;
+    public SpinnerPickerDialog setTitleUnderlineColor(int titleUnderlineColor) {
+        this.titleUnderlineColor = titleUnderlineColor;
         return this;
     }
 
@@ -234,8 +234,11 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
                 DisplayMetrics metrics = new DisplayMetrics();
                 display.getMetrics(metrics);
                 screenWidth = metrics.widthPixels;
-                int margin = getWidthByPersen(0.15f);
-
+                float marginScale = 0.15f;
+                if (screenWidth > 720) {
+                    marginScale = 1.6f * marginScale;
+                }
+                int margin = getWidthByPersen(marginScale);
                 if (dialogBackground == null) {
                     dialogBackground = ContextCompat.getDrawable(mContext, R.drawable.background_white_radius_4dp);
                 }
