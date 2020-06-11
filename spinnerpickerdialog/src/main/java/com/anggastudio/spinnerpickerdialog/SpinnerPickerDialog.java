@@ -104,7 +104,7 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
 
     public SpinnerPickerDialog setArrowButton(boolean isSetArrow) {
         if (isSetArrow) {
-            this.arrowDrawable = ContextCompat.getDrawable(mContext, R.drawable.tooltip_arrow_down);
+            this.arrowDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_arrow_drop_up);
         }
         return this;
     }
@@ -309,26 +309,32 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
 
         // get each number picker
         LinearLayout pickerRootLayout = (LinearLayout) datePicker.getChildAt(0);
+        pickerRootLayout.setGravity(Gravity.CENTER);
         LinearLayout pickersLayout = (LinearLayout) pickerRootLayout.getChildAt(0);
+        pickersLayout.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        pickersLayout.setLayoutParams(layoutParams);
 
         // set layout params for each number picker
-        LinearLayout.LayoutParams pickerLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-        int marginHorizontal = getWidthByPersen(0.05f);
+        LinearLayout.LayoutParams pickerLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        int marginHorizontal = getWidthByPersen(0.035f);
         int marginVertical = getWidthByPersen(0.03f);
         pickerLayoutParams.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical);
 
         pickersCount = pickersLayout.getChildCount();
         for (int i = 0; i < pickersCount; i++) {
+            pickersLayout.setGravity(Gravity.CENTER);
             NumberPicker picker = (NumberPicker) pickersLayout.getChildAt(i);
             setNumberPickerText(picker, mTextColor);
             setNumberPickerDividerColor(picker, mDividerColor);
+            picker.setGravity(Gravity.CENTER);
             picker.setLayoutParams(pickerLayoutParams);
             picker.setDividerPadding(getWidthByPersen(-0.015f));
         }
 
         pickersLayout.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         int pickerHeight = pickersLayout.getMeasuredHeight();
-        if (pickerHeight < 300) pickerHeight = 400;
+        if (pickerHeight < 300) pickerHeight = 350;
         decreasedHeight = (int) (pickerHeight * 0.8f);
 
         if (mContext != null) {
