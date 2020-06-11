@@ -2,8 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="40dp"
     android:layout_marginStart="40dp"
+    android:layout_marginLeft="40dp"
+    android:layout_marginEnd="40dp"
+    android:layout_marginRight="40dp"
+    android:gravity="center"
     android:orientation="vertical">
 
     <LinearLayout
@@ -22,6 +25,9 @@
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:paddingStart="18dp"
+                android:paddingLeft="18dp"
+                android:paddingEnd="18dp"
+                android:paddingRight="18dp"
                 android:text="Set Date"
                 android:textColor="@android:color/holo_green_dark"
                 android:textSize="18sp"
@@ -38,6 +44,7 @@
             android:id="@+id/spinnerDatePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:calendarViewShown="false"
@@ -49,9 +56,10 @@
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingEnd="20dp"
             android:paddingStart="20dp"
-            android:paddingTop="8dp">
+            android:paddingLeft="20dp"
+            android:paddingEnd="20dp"
+            android:paddingRight="20dp">
 
             <View
                 android:layout_width="0dp"
@@ -62,8 +70,11 @@
                 android:id="@+id/cancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingEnd="10dp"
+                android:gravity="center"
                 android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
                 android:text="CANCEL"
                 android:textColor="@android:color/holo_green_dark"
                 android:textSize="14sp" />
@@ -72,8 +83,11 @@
                 android:id="@+id/setDateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingEnd="10dp"
+                android:gravity="center"
                 android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
                 android:text="SET"
                 android:textColor="@android:color/holo_green_dark"
                 android:textSize="14sp" />
