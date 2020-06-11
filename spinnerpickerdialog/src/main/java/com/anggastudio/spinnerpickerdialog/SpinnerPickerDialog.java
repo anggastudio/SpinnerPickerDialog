@@ -328,7 +328,8 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
 
         pickersLayout.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         int pickerHeight = pickersLayout.getMeasuredHeight();
-        decreasedHeight = (int) (pickerHeight * 0.7f);
+        if (pickerHeight < 300) pickerHeight = 400;
+        decreasedHeight = (int) (pickerHeight * 0.8f);
 
         if (mContext != null) {
             addArrowButtons(pickerRootLayout, pickersLayout);
@@ -355,8 +356,8 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) arrowButtonsDown.getLayoutParams();
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         arrowButtonsDown.setLayoutParams(params);
-        arrowButtonsDown.setPadding(0, 0, 0, getWidthByPersen(0.02f));
-        arrowButtonsUp.setPadding(0, getWidthByPersen(0.02f), 0, 0);
+        arrowButtonsDown.setPadding(0, 0, 0, getWidthByPersen(0.01f));
+        arrowButtonsUp.setPadding(0, getWidthByPersen(0.01f), 0, 0);
 
     }
 
@@ -428,7 +429,7 @@ public class SpinnerPickerDialog extends DialogFragment implements View.OnClickL
                 dividerFieldDistance.setAccessible(true);
                 ColorDrawable colorDrawable = new ColorDrawable(color);
                 dividerField.set(numberPicker, colorDrawable);
-                dividerFieldDistance.set(numberPicker, getWidthByPersen(0.1f));
+                dividerFieldDistance.set(numberPicker, 72);
                 numberPicker.invalidate();
             } catch (Exception e) {
                 Log.w("PickerDividerColor", e);

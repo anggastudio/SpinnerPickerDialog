@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showDatePickerDialog() {
-//        SpinnerPickerDialog spinnerPickerDialog = getGreenPickerDialog();
-        SpinnerPickerDialog spinnerPickerDialog = getDefaultPickerDialog();
+        SpinnerPickerDialog spinnerPickerDialog = getGreenPickerDialog();
+//        SpinnerPickerDialog spinnerPickerDialog = getDefaultPickerDialog();
         spinnerPickerDialog.show(this.getSupportFragmentManager(), "");
     }
 
