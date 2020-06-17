@@ -19,7 +19,7 @@ You can do :
 
 ## License
 
-What license? 
+[Apache License 2.0](LICENSE)
 
 ## Download
 
